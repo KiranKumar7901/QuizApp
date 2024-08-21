@@ -1,40 +1,102 @@
-import React, { useState } from 'react';
+// src/components/Quiz.js
+import React, { useState, useEffect } from 'react';
+import { fetchQuestions, fetchCategories } from '../api';
 import Question from './Question';
-import Timer from './Timer';
+import Result from './Result';
+import Review from './Review';
+import StartPage from './StartPage';
+import { Container, Title } from '../styles';
 
-function Quiz({ questions, handleScore, resetQuiz }) {
-  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [score, setScore] = useState(0);
+const Quiz = () => {
+    const [categories, setCategories] = useState([]);
+    const [questions, setQuestions] = useState([]);
+    const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+    const [score, setScore] = useState(0);
+    const [selectedCategory, setSelectedCategory] = useState('');
+    const [quizCompleted, setQuizCompleted] = useState(false);
+    const [quizStarted, setQuizStarted] = useState(false);
+    const [reviewMode, setReviewMode] = useState(false);
+    const [userAnswers, setUserAnswers] = useState([]);
 
-  // Ensure that questions are defined and not an empty array
-  if (!questions || questions.length === 0) {
-    return <p>Loading questions...</p>;
-  }
+    useEffect(() => {
+        const loadCategories = async () => {
+            const categories = await fetchCategories();
+            setCategories(categories);
+        };
+        loadCategories();
+    }, []);
 
-  const handleAnswer = (answerData) => {
-    if (answerData.isCorrect) {
-      setScore(score + 1);
-    }
+    const startQuiz = async () => {
+        const questions = await fetchQuestions(selectedCategory, 10);
+        setQuestions(questions);
+        setScore(0);
+        setCurrentQuestionIndex(0);
+        setQuizCompleted(false);
+        setQuizStarted(true);
+        setUserAnswers([]); // Reset user answers
+    };
 
-    const nextIndex = currentQuestionIndex + 1;
-    if (nextIndex < questions.length) {
-      setCurrentQuestionIndex(nextIndex);
-    } else {
-      handleScore(score + (answerData.isCorrect ? 1 : 0));
-    }
+    const handleAnswer = (correct) => {
+        if (correct) {
+            setScore(score + 1);
+        }
+        setUserAnswers([...userAnswers, correct]);
+    };
+
+    const handleNext = () => {
+        if (currentQuestionIndex < questions.length - 1) {
+            setCurrentQuestionIndex(currentQuestionIndex + 1);
+        } else {
+            setQuizCompleted(true);
+        }
+    };
+
+    const handleReview = () => {
+        setReviewMode(true);
+    };
+
+    const handleBackToResults = () => {
+        setReviewMode(false);
+    };
+
+    const handleRestart = () => {
+      setQuizStarted(false);
+      setReviewMode(false);
+      setQuestions([]);
+      setCurrentQuestionIndex(0);
+      setScore(0);
+      setUserAnswers([]);
   };
-
-  return (
-    <div>
-      <Timer nextQuestion={() => handleAnswer({ isCorrect: false })} />
-      <Question
-        data={questions[currentQuestionIndex]}
-        handleAnswer={handleAnswer}
-        currentQuestion={currentQuestionIndex}
-        questionCount={questions.length}
-      />
-    </div>
-  );
-}
+  
+    return (
+        <Container>
+            <Title>Quiz App</Title>
+            {!quizStarted ? (
+                <StartPage
+                    onStart={startQuiz}
+                    categories={categories}
+                    selectedCategory={selectedCategory}
+                    onSelectCategory={(e) => setSelectedCategory(e.target.value)}
+                />
+            ) : reviewMode ? (
+                <Review 
+                    questions={questions} 
+                    userAnswers={userAnswers} 
+                    onBackToResults={handleBackToResults} 
+                />
+            ) : quizCompleted ? (
+                <Result score={score} total={questions.length} onReview={handleReview} onRestart={handleRestart} />
+            ) : questions.length > 0 ? (
+                <Question
+                    question={questions[currentQuestionIndex]}
+                    onAnswer={handleAnswer}
+                    current={currentQuestionIndex + 1}
+                    total={questions.length}
+                    onNext={handleNext}
+                />
+            ) : null}
+        </Container>
+    );
+};
 
 export default Quiz;
