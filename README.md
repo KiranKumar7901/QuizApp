@@ -7,3 +7,6 @@
     <li><b>Responsive Design:</b> Optimized for both desktop and mobile devices.</li>
     <li><b>User-Friendly Interface:</b> Easy to navigate with intuitive design and interactive elements.</li>
   </ol>
+  
+### Link for Demo
+Link:- https://quick-quizzer-app.netlify.app/
