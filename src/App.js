@@ -1,24 +1,24 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import CategorySelection from './Components/CategorySelection';
+import Quiz from './Components/Quiz';
+import Result from './Components/Result';
+import Leaderboard from './Components/Leaderboard';
 
 function App() {
+  const [category, setCategory] = useState('');
+  const [questionCount, setQuestionCount] = useState(10);
+  const [score, setScore] = useState(0);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<CategorySelection setCategory={setCategory} setQuestionCount={setQuestionCount} />} />
+        <Route path="/quiz" element={<Quiz category={category} questionCount={questionCount} setScore={setScore} />} />
+        <Route path="/result" element={<Result score={score} />} />
+        <Route path="/leaderboard" element={<Leaderboard />} />
+      </Routes>
+    </Router>
   );
 }
 
