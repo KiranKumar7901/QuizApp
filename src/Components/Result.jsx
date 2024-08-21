@@ -1,4 +1,3 @@
-// src/components/Result.js
 import React from 'react';
 import { Container, Title, Button } from '../styles';
 

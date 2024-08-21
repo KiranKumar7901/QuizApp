@@ -1,4 +1,3 @@
-// src/components/StartPage.js
 import React from 'react';
 import { Container, Title, InstructionText, Button, CategorySelect } from '../styles';
 

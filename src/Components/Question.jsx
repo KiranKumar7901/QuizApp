@@ -1,5 +1,4 @@
-// src/components/Question.js
-import React, { useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import { QuestionContainer, QuestionText, AnswerOption, Timer, Button } from '../styles';
 
 const Question = ({ question, onAnswer, current, total, onNext }) => {
@@ -13,6 +12,12 @@ const Question = ({ question, onAnswer, current, total, onNext }) => {
         setSelectedAnswer(''); // Clear the selected answer
     }, [question]);
 
+    const handleNext = useCallback(() => {
+        setTimeout(() => {
+            onNext(); // Move to the next question after a brief pause
+        }, 500); // Delay to show the selected answer
+    }, [onNext]); // Include onNext in the dependency array
+
     useEffect(() => {
         if (timeLeft > 0) {
             const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
@@ -20,7 +25,7 @@ const Question = ({ question, onAnswer, current, total, onNext }) => {
         } else {
             handleNext();
         }
-    }, [timeLeft]);
+    }, [timeLeft,handleNext]);
 
     const handleAnswer = (answer) => {
         if (!isAnswered) {
@@ -30,11 +35,6 @@ const Question = ({ question, onAnswer, current, total, onNext }) => {
         }
     };
 
-    const handleNext = () => {
-        setTimeout(() => {
-            onNext(); // Move to the next question after a brief pause
-        }, 500); // Delay to show the selected answer
-    };
 
     return (
         <QuestionContainer>

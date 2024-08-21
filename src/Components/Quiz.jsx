@@ -1,4 +1,3 @@
-// src/components/Quiz.js
 import React, { useState, useEffect } from 'react';
 import { fetchQuestions, fetchCategories } from '../api';
 import Question from './Question';

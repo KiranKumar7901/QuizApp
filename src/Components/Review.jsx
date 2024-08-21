@@ -1,4 +1,3 @@
-// src/components/Review.js
 import React from 'react';
 import { Container, QuestionText, AnswerOption, Button } from '../styles';
 
