@@ -1,5 +1,4 @@
-import styled, { css } from 'styled-components';
-
+import styled, {css} from "styled-components";
 
 export const Container = styled.div`
   max-width: 800px;
@@ -25,7 +24,7 @@ export const Button = styled.button`
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  
+
   &:hover {
     background-color: #0056b3;
   }
@@ -46,48 +45,61 @@ export const QuestionText = styled.h2`
   margin-bottom: 20px;
 `;
 
-// export const AnswerOption = styled.button`
-//   display: block;
-//   width: 100%;
-//   margin: 10px 0;
-//   padding: 10px;
-//   background-color: ${(props) => (props.selected ? '#007bff' : '#f4f4f4')};
-//   color: ${(props) => (props.selected ? '#fff' : '#333')};
-//   border: 2px solid #ddd;
-//   border-radius: 5px;
-//   cursor: pointer;
-  
-//   &:hover {
-//     background-color: ${(props) => (props.selected ? '#0056b3' : '#ddd')};
-//   }
-
-//   &:disabled {
-//     background-color: ${(props) => (props.selected ? '#007bff' : '#f4f4f4')};
-//     cursor: not-allowed;
-//   }
-// `;
-
 export const AnswerOption = styled.button`
-    padding: 10px 20px;
-    margin: 5px 0;
-    font-size: 16px;
-    cursor: pointer;
-    border: 2px solid #ccc;
-    background-color: ${({ selected }) => (selected ? '#f0f0f0' : '#fff')};
+  display: block;
+  width: 100%;
+  margin: 10px 0;
+  padding: 10px;
+  background-color: ${(props) => (props.selected ? "#007bff" : "#f4f4f4")};
+  color: ${(props) => (props.selected ? "#fff" : "#333")};
+  border: 2px solid #ddd;
+  border-radius: 5px;
+  cursor: pointer;
 
-    ${({ correct }) => correct && css`
-        border-color: green;
-        background-color: #d4edda; /* Green background for correct answers */
+  background-color: ${({ selected }) => (selected ? "#f0f0f0" : "#fff")};
+
+  ${({ correct }) =>
+    correct &&
+    css`
+      border-color: green;
+      background-color: #d4edda; /* Green background for correct answers */
     `}
 
-    ${({ incorrect }) => incorrect && css`
-        border-color: red;
-        background-color: #f8d7da; /* Red background for incorrect answers */
+  ${({ incorrect }) =>
+    incorrect &&
+    css`
+      border-color: red;
+      background-color: #f8d7da; /* Red background for incorrect answers */
     `}
+  
+  &:hover {
+    background-color: ${(props) => (props.selected ? "#0056b3" : "#ddd")};
+  }
+
+  &:disabled {
+    background-color: ${(props) => (props.selected ? "#007bff" : "#f4f4f4")};
+    cursor: not-allowed;
+  }
 `;
 
+// export const AnswerOption = styled.button`
+//     padding: 10px 20px;
+//     margin: 5px 0;
+//     font-size: 16px;
+//     cursor: pointer;
+//     border: 2px solid #ccc;
+//     background-color: ${({ selected }) => (selected ? '#f0f0f0' : '#fff')};
 
+//     ${({ correct }) => correct && css`
+//         border-color: green;
+//         background-color: #d4edda; /* Green background for correct answers */
+//     `}
 
+//     ${({ incorrect }) => incorrect && css`
+//         border-color: red;
+//         background-color: #f8d7da; /* Red background for incorrect answers */
+//     `}
+// `;
 
 export const Timer = styled.div`
   text-align: right;
@@ -111,19 +123,19 @@ export const CategorySelect = styled.select`
 `;
 
 export const InstructionText = styled.div`
-    text-align: left;
-    margin: 20px 0;
-    font-size: 18px;
-    color: #333;
-    
-    ul {
-        margin-top: 10px;
-        list-style-type: disc;
-        padding-left: 20px;
-    }
+  text-align: left;
+  margin: 20px 0;
+  font-size: 18px;
+  color: #333;
 
-    p {
-        margin: 0;
-        font-weight: bold;
-    }
+  ul {
+    margin-top: 10px;
+    list-style-type: disc;
+    padding-left: 20px;
+  }
+
+  p {
+    margin: 0;
+    font-weight: bold;
+  }
 `;
