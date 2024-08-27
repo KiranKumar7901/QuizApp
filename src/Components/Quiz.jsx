@@ -5,8 +5,10 @@ import Result from './Result';
 import Review from './Review';
 import StartPage from './StartPage';
 import { Container, Title } from '../styles';
+import { useParams } from 'react-router-dom';
 
 const Quiz = () => {
+    const { type } = useParams();
     const [categories, setCategories] = useState([]);
     const [questions, setQuestions] = useState([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -16,6 +18,7 @@ const Quiz = () => {
     const [quizStarted, setQuizStarted] = useState(false);
     const [reviewMode, setReviewMode] = useState(false);
     const [userAnswers, setUserAnswers] = useState([]);
+    const [numberOfQuestions, setNumberOfQuestions] = useState();
 
     useEffect(() => {
         const loadCategories = async () => {
@@ -25,8 +28,16 @@ const Quiz = () => {
         loadCategories();
     }, []);
 
+    useEffect(() => {
+        const loadQuestions = async () => {
+            const questions = await fetchQuestions(type, numberOfQuestions);
+            setQuestions(questions);
+        };
+        loadQuestions();
+    }, [type]);
+
     const startQuiz = async () => {
-        const questions = await fetchQuestions(selectedCategory, 10);
+        const questions = await fetchQuestions(selectedCategory, numberOfQuestions);
         setQuestions(questions);
         setScore(0);
         setCurrentQuestionIndex(0);
@@ -76,6 +87,8 @@ const Quiz = () => {
                     categories={categories}
                     selectedCategory={selectedCategory}
                     onSelectCategory={(e) => setSelectedCategory(e.target.value)}
+                    numberOfQuestions={numberOfQuestions}
+                    onSelectNumberOfQuestions={(e) => setNumberOfQuestions(e.target.value)}
                 />
             ) : reviewMode ? (
                 <Review 
@@ -84,7 +97,12 @@ const Quiz = () => {
                     onBackToResults={handleBackToResults} 
                 />
             ) : quizCompleted ? (
-                <Result score={score} total={questions.length} onReview={handleReview} onRestart={handleRestart} />
+                <Result score={score} 
+                        total={questions.length} 
+                        onReview={handleReview} 
+                        onRestart={handleRestart} 
+                        category={categories.find(cat => cat.id === Number(selectedCategory))?.name} 
+                />
             ) : questions.length > 0 ? (
                 <Question
                     question={questions[currentQuestionIndex]}
@@ -92,6 +110,7 @@ const Quiz = () => {
                     current={currentQuestionIndex + 1}
                     total={questions.length}
                     onNext={handleNext}
+                    category={categories.find(cat => cat.id === Number(selectedCategory))?.name}
                 />
             ) : null}
         </Container>

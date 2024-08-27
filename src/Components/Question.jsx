@@ -1,7 +1,8 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import { QuestionContainer, QuestionText, AnswerOption, Timer, Button } from '../styles';
+import {decodeHtml} from "../utils/decodeHtml";
 
-const Question = ({ question, onAnswer, current, total, onNext }) => {
+const Question = ({ question, onAnswer, current, total, onNext, category }) => {
     const [selectedAnswer, setSelectedAnswer] = useState('');
     const [timeLeft, setTimeLeft] = useState(15);
     const [isAnswered, setIsAnswered] = useState(false);
@@ -37,20 +38,22 @@ const Question = ({ question, onAnswer, current, total, onNext }) => {
 
 
     return (
+        <>
+        {category && <h3 style={{ textAlign: 'center', color: '#555' }}>{category}</h3>}
         <QuestionContainer>
             <QuestionText>
-                {current}/{total}: {question.question}
+            {current}/{total}: {decodeHtml(question.question)}
             </QuestionText>
             {question.incorrect_answers.concat(question.correct_answer)
                 .sort()
                 .map((answer) => (
                     <AnswerOption
-                        key={answer}
-                        selected={selectedAnswer === answer}
-                        onClick={() => handleAnswer(answer)}
-                        disabled={isAnswered} // Disable options only after an answer is selected
+                    key={answer}
+                    selected={selectedAnswer === answer}
+                    onClick={() => handleAnswer(answer)}
+                    disabled={isAnswered} // Disable options only after an answer is selected
                     >
-                        {answer}
+                        {decodeHtml(answer)}
                     </AnswerOption>
                 ))}
             <Timer>Time Left: {timeLeft}s</Timer>
@@ -58,6 +61,7 @@ const Question = ({ question, onAnswer, current, total, onNext }) => {
                 Next
             </Button>
         </QuestionContainer>
+        </>
     );
 };
 
